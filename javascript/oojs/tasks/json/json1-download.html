@@ -1,57 +1,35 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8"/>
-    <title>JSON: Task 1</title>
-    <style>
-      p {
-        color: purple;
-        margin: 0.5em 0;
-      }
+const section = document.querySelector('section');
 
-      * {
-        box-sizing: border-box;
-      }
-    </style>
-    <link rel="stylesheet" href="../styles.css" />
-  </head>
+let para1 = document.createElement('p');
+let para2 = document.createElement('p');
+let motherInfo = 'The mother cats are called ';
+let kittenInfo;
+const requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/tasks/json/sample.json';
 
-  <body>
+fetch(requestURL)
+  .then(response => response.json())
+  .then(data => displayCatInfo(data))
 
-    <section class="preview">
+function displayCatInfo(catData) {
+  let total = 0;
+  let male = 0;
 
-
-
-    </section>
-
-  </body>
-  <script>
-    const section = document.querySelector('section');
-
-    let para1 = document.createElement('p');
-    let para2 = document.createElement('p');
-    let motherInfo = 'The mother cats are called ';
-    let kittenInfo;
-    const requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/tasks/json/sample.json';
-
-    fetch(requestURL)
-    .then(response => response.text())
-    .then(text => displayCatInfo(text))
-
-    function displayCatInfo(catString) {
-      let total = 0;
-      let male = 0;
-
-      // Add your code here
-
-      // Don't edit the code below here!
-
-      para1.textContent = motherInfo;
-      para2.textContent = kittenInfo;
+  catData.forEach(cat => {
+    if (cat.gender === 'F') {
+      motherInfo += `${cat.name}, `;
+    } else if (cat.gender === 'M') {
+      male++;
     }
 
-    section.appendChild(para1);
-    section.appendChild(para2);
-  </script>
+    total++;
+  });
 
-</html>
+  motherInfo = motherInfo.slice(0, -2); // Remove the last comma and space
+  kittenInfo = `There are ${total} kittens, including ${male} male kittens.`;
+
+  para1.textContent = motherInfo;
+  para2.textContent = kittenInfo;
+}
+
+section.appendChild(para1);
+section.appendChild(para2);
